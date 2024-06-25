@@ -1,5 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+
 
 const Signup = ({ setUserName, authErr, setAuthErr }) => {
     const [email, setEmail] = useState('')
@@ -7,6 +10,12 @@ const Signup = ({ setUserName, authErr, setAuthErr }) => {
     const [name, setName] = useState('')
     const [err, setErr] = useState('')
     const [signingIn, setSigningIn] = useState(false)
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setIsPasswordVisible(!isPasswordVisible);
+    };
+
     const navigate = useNavigate()
 
     const signIn = async () => {
@@ -51,7 +60,10 @@ const Signup = ({ setUserName, authErr, setAuthErr }) => {
                 <label className='text-xl mt-4'>Email </label>
                 <input className={`py-1.5 border ${err == 'Email not valid' ? 'border-red-600' : 'border-gray-700'} rounded px-1`} type={'email'} value={email} onChange={(e) => setEmail(e.target.value)} />
                 <label className='text-xl mt-4'>Password </label>
-                <input className={`py-1.5 border ${err == 'Password is weak' ? 'border-red-600' : 'border-gray-700'} rounded px-1`} type={'password'} value={password} onChange={(e) => setPassword(e.target.value)} />
+                <div className='relative'>
+                    <input className={`py-1.5 w-full border ${err == 'Password Incorrect' ? 'border-red-600' : 'border-gray-700'} rounded px-1`} type={isPasswordVisible ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <button type='button' onClick={togglePasswordVisibility} className='absolute right-2 top-2' ><FontAwesomeIcon icon={isPasswordVisible ? faEyeSlash : faEye} /></button>
+                </div>
                 {!signingIn ? <button className='w-full border rounded bg-purple-600 border-gray-600 mt-6 text-white font-medium py-1 self-center' onClick={() => { setSigningIn(true); signIn() }}>Signup</button> : <button className='w-full border rounded bg-purple-800 border-gray-600 mt-6 text-white font-medium py-1 self-center' disabled>Signing Up</button>}
             </div>
             <div className='flex justify-center lg:max-w-2xl max-w-md mx-auto mt-8'>
